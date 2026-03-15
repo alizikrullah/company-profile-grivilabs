@@ -2,18 +2,25 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
-export default function Login() {
+export default function Register() {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setError("");
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name },
+      },
+    });
 
     if (error) {
       setError(error.message);
@@ -21,7 +28,7 @@ export default function Login() {
       return;
     }
 
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -32,7 +39,7 @@ export default function Login() {
             Grivi<span className="text-[#2ad882]">Labs.</span>
           </h1>
           <p className="font-inter text-[#9ca3af] text-sm mt-2">
-            Masuk ke akunmu
+            Buat akun baru
           </p>
         </div>
 
@@ -42,6 +49,19 @@ export default function Login() {
               {error}
             </p>
           )}
+
+          <div className="flex flex-col gap-1">
+            <label className="font-inter text-xs text-[#9ca3af] tracking-wider uppercase">
+              Nama Lengkap
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="John Doe"
+              className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 font-inter text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#2ad882] transition-colors"
+            />
+          </div>
 
           <div className="flex flex-col gap-1">
             <label className="font-inter text-xs text-[#9ca3af] tracking-wider uppercase">
@@ -64,23 +84,23 @@ export default function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Masukkan password"
+              placeholder="Minimal 6 karakter"
               className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 font-inter text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#2ad882] transition-colors"
             />
           </div>
 
           <button
-            onClick={handleLogin}
+            onClick={handleRegister}
             disabled={loading}
             className="mt-2 bg-[#2ad882] hover:bg-[#22c46e] disabled:opacity-50 disabled:cursor-not-allowed text-[#0d1117] font-montserrat font-bold uppercase tracking-widest text-sm rounded-lg py-3 transition-colors"
           >
-            {loading ? "Memproses..." : "Login"}
+            {loading ? "Memproses..." : "Daftar"}
           </button>
 
           <p className="font-inter text-sm text-[#9ca3af] text-center">
-            Belum punya akun?{" "}
-            <Link to="/register" className="text-[#2ad882] hover:underline">
-              Daftar di sini
+            Sudah punya akun?{" "}
+            <Link to="/login" className="text-[#2ad882] hover:underline">
+              Login di sini
             </Link>
           </p>
         </div>

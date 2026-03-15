@@ -1,17 +1,20 @@
-import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/layout/Navbar'
-import Footer from './components/layout/Footer'
-import Home from './pages/Home'
-import About from './pages/About'
-import Services from './pages/Services'
-import Teams from './pages/Teams'
-import BlogList from './pages/BlogList'
-import CreateBlog from './pages/CreateBlog'
-import Login from './pages/Login'
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
+import ProtectedRoute from "./components/layout/ProtectedRoute";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Services from "./pages/Services";
+import Teams from "./pages/Teams";
+import BlogList from "./pages/BlogList";
+import CreateBlog from "./pages/CreateBlog";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import GuestRoute from "./components/layout/GuestRoute";
 
-const App = () => {
+export default function App() {
   return (
-    <div>
+    <>
       <Navbar />
       <main>
         <Routes>
@@ -20,13 +23,19 @@ const App = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/blog" element={<BlogList />} />
-          <Route path="/blog/create" element={<CreateBlog />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
+          <Route
+            path="/blog/create"
+            element={
+              <ProtectedRoute requireAdmin>
+                <CreateBlog />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
       <Footer />
-    </div>
-  )
+    </>
+  );
 }
-
-export default App
