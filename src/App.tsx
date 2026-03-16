@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { TeamsProvider } from "./store/TeamsContext";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
@@ -14,7 +15,7 @@ import GuestRoute from "./components/layout/GuestRoute";
 
 export default function App() {
   return (
-    <>
+    <TeamsProvider>
       <Navbar />
       <main>
         <Routes>
@@ -36,6 +37,6 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
-    </>
+    </TeamsProvider>
   );
 }
