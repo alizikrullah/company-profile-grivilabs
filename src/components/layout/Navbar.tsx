@@ -41,7 +41,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link to="/" className="shrink-0">
-            <span className="font-montserrat font-black tracking-[-0.03em] text-xl">
+            <span className="font-montserrat font-black tracking-[-0.03em] text-4xl">
               Grivi<span style={{ color: "var(--color-accent)" }}>Labs.</span>
             </span>
           </Link>
@@ -89,7 +89,7 @@ export default function Navbar() {
                 </span>
                 <button
                   onClick={signOut}
-                  className="font-montserrat font-bold uppercase tracking-widest text-xs px-6 py-2.5 rounded transition-all duration-200"
+                  className="font-montserrat font-bold uppercase tracking-widest text-xs px-4 py-2 rounded transition-all duration-200"
                   style={{
                     border: "1px solid var(--color-border)",
                     color: "var(--color-text-secondary)",
@@ -111,7 +111,7 @@ export default function Navbar() {
               <div className="flex items-center gap-3">
                 <Link to="/register">
                   <button
-                    className="font-montserrat font-bold uppercase tracking-widest text-xs px-6 py-2.5 rounded transition-all duration-200"
+                    className="font-montserrat font-bold uppercase tracking-widest text-xs px-4 py-2 rounded transition-all duration-200"
                     style={{
                       border: "1px solid var(--color-border)",
                       color: "var(--color-text-secondary)",
@@ -131,7 +131,7 @@ export default function Navbar() {
                 </Link>
                 <Link to="/login">
                   <button
-                    className="font-montserrat font-bold uppercase tracking-widest text-xs px-6 py-2.5 rounded transition-all duration-200"
+                    className="font-montserrat font-bold uppercase tracking-widest text-xs px-4 py-2 rounded transition-all duration-200"
                     style={{
                       border: "1px solid var(--color-accent)",
                       color: "var(--color-accent)",

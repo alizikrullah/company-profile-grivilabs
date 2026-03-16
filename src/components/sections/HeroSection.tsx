@@ -2,7 +2,7 @@ import { motion, type Variants } from 'motion/react'
 import { Link } from 'react-router-dom'
 
 const codeLines = [
-  { text: '// GriviLabs — 100% Custom Code', color: '#6b7280' },
+  { text: '// GriviLabs 100% Custom Code', color: '#6b7280' },
   { text: 'const website = buildFrom("scratch")', color: '#9ca3af' },
   { text: '  .stack(["React", "TypeScript"])', color: '#9ca3af' },
   { text: '  .noWordPress(true)', color: '#2ad882' },
