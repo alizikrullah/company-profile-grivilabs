@@ -47,9 +47,10 @@ export default function Footer() {
             >
               Jasa pembuatan website profesional untuk UMKM Indonesia. Kami bantu bisnis kamu hadir secara digital dengan tampilan yang keren dan performa yang solid.
             </p>
+            {/* FIX CONTRAST: ganti color-text-muted ke color-text-secondary */}
             <p
               className="font-inter text-xs mt-4"
-              style={{ color: "var(--color-text-muted)" }}
+              style={{ color: "var(--color-text-secondary)" }}
             >
               📍 Indonesia
             </p>
@@ -78,14 +79,15 @@ export default function Footer() {
           </div>
 
           {/* Halaman & Blog Columns */}
+          {/* FIX HEADING ORDER: h4 diganti p dengan styling identik */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4
+              <p
                 className="font-montserrat font-black uppercase tracking-widest text-xs mb-4"
                 style={{ color: "var(--color-text-primary)" }}
               >
                 {title}
-              </h4>
+              </p>
               <ul className="flex flex-col gap-2">
                 {links.map((link) => (
                   <li key={link.path}>
@@ -110,12 +112,12 @@ export default function Footer() {
 
           {/* Hubungi Kami Column */}
           <div>
-            <h4
+            <p
               className="font-montserrat font-black uppercase tracking-widest text-xs mb-4"
               style={{ color: "var(--color-text-primary)" }}
             >
               Hubungi Kami
-            </h4>
+            </p>
             <ul className="flex flex-col gap-2">
               <li>
                 <a
@@ -130,7 +132,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://wa.me/6281234567890"
+                  href="https://wa.me/628993157370"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-inter text-sm transition-colors duration-200"
@@ -138,17 +140,17 @@ export default function Footer() {
                   onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-accent)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = "var(--color-text-secondary)"; }}
                 >
-                  +62 812-3456-7890
+                  +62 899-3157-370
                 </a>
               </li>
             </ul>
 
-            <h4
+            <p
               className="font-montserrat font-black uppercase tracking-widest text-xs mb-3 mt-6"
               style={{ color: "var(--color-text-primary)" }}
             >
               Jam Operasional
-            </h4>
+            </p>
             <p className="font-inter text-sm" style={{ color: "var(--color-text-secondary)" }}>
               Senin - Minggu (09.00 - 17.00 WIB)
             </p>
@@ -161,9 +163,10 @@ export default function Footer() {
           className="mt-16 pt-8"
           style={{ borderTop: "1px solid var(--color-border)" }}
         >
+          {/* FIX CONTRAST: ganti color-text-muted ke color-text-secondary */}
           <p
             className="font-inter text-xs"
-            style={{ color: "var(--color-text-muted)" }}
+            style={{ color: "var(--color-text-secondary)" }}
           >
             &copy; {year} GriviLabs. All rights reserved.
           </p>

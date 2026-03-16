@@ -26,7 +26,7 @@ const LogoStrip = () => {
   const doubled = [...logos, ...logos]
 
   return (
-    <section className="py-10 border-b border-white/10 bg-[#0d1117]" style={{ overflow: 'hidden' }}>
+    <section className="py-10 border-b border-white/10 bg-[#0d1117]">
       <div className="flex items-center gap-4 mb-8 px-6">
         <div className="flex-1 h-px bg-white/10" />
         <span className="font-inter text-xs tracking-[0.3em] text-[#9ca3af] uppercase whitespace-nowrap">
@@ -35,37 +35,26 @@ const LogoStrip = () => {
         <div className="flex-1 h-px bg-white/10" />
       </div>
 
-      {/* Wrapper dengan overflow hidden dan lebar penuh layar */}
-      <div
-        style={{
-          overflow: 'hidden',
-          width: '100%',
-          position: 'relative',
-        }}
-      >
+      {/* Satu wrapper overflow-hidden, tidak nested */}
+      <div className="overflow-hidden w-full">
         <div
+          className="flex items-center"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '2rem',
+            gap: '1.5rem',
             width: 'max-content',
             animation: 'marquee 40s linear infinite',
+            willChange: 'transform',
           }}
         >
           {doubled.map((logo, i) => (
             <div
               key={i}
+              className="shrink-0 flex items-center justify-center bg-white rounded-xl"
               style={{
                 width: '120px',
                 height: '72px',
-                flexShrink: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'white',
-                borderRadius: '12px',
                 padding: '8px 10px',
-                opacity: 0.7,
+                opacity: 0.75,
               }}
             >
               <img
