@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -7,7 +7,6 @@ import CharacterCount from '@tiptap/extension-character-count'
 import { motion } from 'motion/react'
 import { supabase } from '../lib/supabase'
 import { useBlog } from '../store/BlogContext'
-import { useAuth } from '../store/AuthContext'
 
 // ------------------------------------
 // TYPES
@@ -23,7 +22,7 @@ interface FormData {
   tags: string
 }
 
-const STORAGE_KEY = 'grivilabs-draft-create'
+const getStorageKey = (slug: string) => `grivilabs-draft-edit-${slug}`
 
 // ------------------------------------
 // MARKDOWN IMPORT
@@ -233,50 +232,34 @@ const Toolbar = ({ editor }: { editor: ReturnType<typeof useEditor> }) => {
 // MAIN PAGE
 // ------------------------------------
 
-const CreateBlog = () => {
+const EditBlog = () => {
+  const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
-  const { refetch } = useBlog()
-  const { user } = useAuth()
+  const { posts, refetch } = useBlog()
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [draftRestored, setDraftRestored] = useState(false)
+  const [postId, setPostId] = useState<string | null>(null)
+  const [ready, setReady] = useState(false)
   const [showMarkdownImport, setShowMarkdownImport] = useState(false)
   const [markdownInput, setMarkdownInput] = useState('')
   const formRef = useRef<FormData | null>(null)
 
-  const [form, setForm] = useState<FormData>(() => {
-    try {
-      const saved = sessionStorage.getItem(STORAGE_KEY)
-      if (saved) {
-        const parsed = JSON.parse(saved)
-        return {
-          title: parsed.title ?? '',
-          slug: parsed.slug ?? '',
-          excerpt: parsed.excerpt ?? '',
-          coverImage: parsed.coverImage ?? '',
-          author: parsed.author ?? user?.user_metadata?.full_name ?? '',
-          publishDate: parsed.publishDate ?? new Date().toISOString().slice(0, 10),
-          tags: parsed.tags ?? '',
-        }
-      }
-    } catch {}
-    return {
-      title: '',
-      slug: '',
-      excerpt: '',
-      coverImage: '',
-      author: user?.user_metadata?.full_name ?? '',
-      publishDate: new Date().toISOString().slice(0, 10),
-      tags: '',
-    }
+  const [form, setForm] = useState<FormData>({
+    title: '',
+    slug: '',
+    excerpt: '',
+    coverImage: '',
+    author: '',
+    publishDate: new Date().toISOString().slice(0, 10),
+    tags: '',
   })
 
   const editor = useEditor({
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: 'Mulai tulis konten artikelmu di sini...',
+        placeholder: 'Konten artikel...',
       }),
       CharacterCount,
     ],
@@ -290,48 +273,85 @@ const CreateBlog = () => {
     },
   })
 
-  // Restore editor content from draft
-  useEffect(() => {
-    if (!editor || draftRestored) return
-    try {
-      const saved = sessionStorage.getItem(STORAGE_KEY)
-      if (saved) {
-        const parsed = JSON.parse(saved)
-        if (parsed.content) {
-          editor.commands.setContent(parsed.content)
-          setDraftRestored(true)
-        }
-      }
-    } catch {}
-    setDraftRestored(true)
-  }, [editor, draftRestored])
-
   // Keep formRef in sync
   useEffect(() => {
     formRef.current = form
   }, [form])
 
   const saveDraft = useCallback(() => {
+    if (!slug) return
     try {
       const content = editor?.getHTML() ?? ''
       const currentForm = formRef.current ?? form
       sessionStorage.setItem(
-        STORAGE_KEY,
+        getStorageKey(slug),
         JSON.stringify({ ...currentForm, content })
       )
     } catch {}
-  }, [editor, form])
+  }, [editor, form, slug])
 
   // Save draft on form changes
   useEffect(() => {
-    saveDraft()
-  }, [form, saveDraft])
+    if (ready) saveDraft()
+  }, [form, saveDraft, ready])
 
   const clearDraft = () => {
+    if (!slug) return
     try {
-      sessionStorage.removeItem(STORAGE_KEY)
+      sessionStorage.removeItem(getStorageKey(slug))
     } catch {}
   }
+
+  // Load data artikel dari context atau draft
+  useEffect(() => {
+    if (!slug || !editor) return
+    const post = posts.find((p) => p.slug === slug)
+    if (!post) return
+    if (post.source !== 'supabase') {
+      setError('Artikel dari Contentful tidak bisa diedit dari sini.')
+      setReady(true)
+      return
+    }
+
+    setPostId(post.id)
+
+    // Check if there's a saved draft
+    try {
+      const saved = sessionStorage.getItem(getStorageKey(slug))
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        setForm({
+          title: parsed.title ?? post.title,
+          slug: parsed.slug ?? post.slug,
+          excerpt: parsed.excerpt ?? post.excerpt,
+          coverImage: parsed.coverImage ?? post.coverImage,
+          author: parsed.author ?? post.author,
+          publishDate: (parsed.publishDate ?? post.publishDate).slice(0, 10),
+          tags: parsed.tags ?? post.tags.join(', '),
+        })
+        if (parsed.content) {
+          editor.commands.setContent(parsed.content)
+        } else {
+          editor.commands.setContent(post.content)
+        }
+        setReady(true)
+        return
+      }
+    } catch {}
+
+    // No draft, load from post data
+    setForm({
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      coverImage: post.coverImage,
+      author: post.author,
+      publishDate: post.publishDate.slice(0, 10),
+      tags: post.tags.join(', '),
+    })
+    editor.commands.setContent(post.content)
+    setReady(true)
+  }, [slug, posts, editor])
 
   const generateSlug = useCallback((title: string) => {
     return title
@@ -365,7 +385,7 @@ const CreateBlog = () => {
 
     const content = editor?.getHTML() ?? ''
 
-    if (!form.title || !form.slug || !form.excerpt || !content || !form.author) {
+    if (!form.title || !form.slug || !form.excerpt || !content || !form.author || !postId) {
       setError('Harap isi semua field yang wajib diisi.')
       return
     }
@@ -374,33 +394,50 @@ const CreateBlog = () => {
     setError(null)
 
     try {
-      const { error: insertError } = await supabase.from('posts').insert({
-        title: form.title,
-        slug: form.slug,
-        excerpt: form.excerpt,
-        content,
-        cover_image: form.coverImage || null,
-        author: form.author,
-        publish_date: new Date(form.publishDate).toISOString(),
-        tags: form.tags || null,
-      })
+      const { error: updateError } = await supabase
+        .from('posts')
+        .update({
+          title: form.title,
+          slug: form.slug,
+          excerpt: form.excerpt,
+          content,
+          cover_image: form.coverImage || null,
+          author: form.author,
+          publish_date: new Date(form.publishDate).toISOString(),
+          tags: form.tags || null,
+        })
+        .eq('id', postId)
 
-      if (insertError) throw insertError
+      if (updateError) throw updateError
 
       clearDraft()
       setSuccess(true)
       refetch()
-      setTimeout(() => navigate('/blog'), 2000)
+      setTimeout(() => navigate(`/blog/${form.slug}`), 2000)
     } catch (err) {
       console.error(err)
       setError(
         err instanceof Error
-          ? `Gagal mempublikasikan artikel: ${err.message}`
+          ? `Gagal menyimpan perubahan: ${err.message}`
           : 'Terjadi kesalahan. Coba lagi.'
       )
     } finally {
       setSubmitting(false)
     }
+  }
+
+  // ── Loading State ──
+  if (!ready) {
+    return (
+      <main className="min-h-screen bg-[#0d1117] pt-32 pb-24">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 animate-pulse space-y-6">
+          <div className="h-8 bg-white/10 rounded w-1/3" />
+          <div className="h-12 bg-white/10 rounded" />
+          <div className="h-12 bg-white/10 rounded" />
+          <div className="h-64 bg-white/10 rounded-xl" />
+        </div>
+      </main>
+    )
   }
 
   // ── Success State ──
@@ -418,9 +455,9 @@ const CreateBlog = () => {
             </svg>
           </div>
           <h2 className="font-montserrat font-black text-2xl text-white uppercase">
-            Artikel Dipublikasikan!
+            Artikel Diperbarui!
           </h2>
-          <p className="font-inter text-sm text-[#8b949e]">Mengarahkan ke halaman blog...</p>
+          <p className="font-inter text-sm text-[#8b949e]">Mengarahkan ke halaman artikel...</p>
         </motion.div>
       </main>
     )
@@ -437,10 +474,10 @@ const CreateBlog = () => {
             transition={{ duration: 0.5 }}
           >
             <span className="font-inter text-xs tracking-[0.3em] text-[#2ad882] uppercase">
-              Buat Artikel
+              Edit Artikel
             </span>
             <h1 className="font-montserrat font-black text-3xl sm:text-4xl text-white uppercase tracking-tight mt-3">
-              Tulis Artikel Baru
+              Edit: {form.title || 'Artikel'}
             </h1>
           </motion.div>
         </div>
@@ -473,7 +510,6 @@ const CreateBlog = () => {
                 name="title"
                 value={form.title}
                 onChange={handleTitleChange}
-                placeholder="Kenapa Website Lambat Membunuh Bisnis Kamu"
                 className="w-full px-4 py-3.5 rounded-xl border border-white/10 bg-[#161b22] text-white font-inter text-sm placeholder:text-[#484f58] focus:outline-none focus:border-[#2ad882]/50 focus:ring-1 focus:ring-[#2ad882]/20 transition-all"
               />
             </div>
@@ -502,7 +538,6 @@ const CreateBlog = () => {
                 value={form.excerpt}
                 onChange={handleChange}
                 rows={3}
-                placeholder="Tulis ringkasan singkat yang menarik pembaca..."
                 className="w-full px-4 py-3.5 rounded-xl border border-white/10 bg-[#161b22] text-white font-inter text-sm placeholder:text-[#484f58] focus:outline-none focus:border-[#2ad882]/50 focus:ring-1 focus:ring-[#2ad882]/20 transition-all resize-none"
               />
             </div>
@@ -589,7 +624,7 @@ const CreateBlog = () => {
                     value={markdownInput}
                     onChange={(e) => setMarkdownInput(e.target.value)}
                     rows={6}
-                    placeholder="Paste konten markdown di sini... (# Heading, **bold**, *italic*, - list)"
+                    placeholder="Paste konten markdown di sini..."
                     className="w-full px-4 py-3.5 rounded-xl border border-white/10 bg-[#0d1117] text-white font-mono text-sm placeholder:text-[#484f58] focus:outline-none focus:border-[#2ad882]/50 transition-all resize-none"
                   />
                   <button
@@ -627,11 +662,11 @@ const CreateBlog = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                     </svg>
-                    Mempublikasikan...
+                    Menyimpan...
                   </>
                 ) : (
                   <>
-                    Publikasikan Artikel
+                    Simpan Perubahan
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -642,7 +677,7 @@ const CreateBlog = () => {
                 type="button"
                 onClick={() => {
                   clearDraft()
-                  navigate('/blog')
+                  navigate(`/blog/${slug}`)
                 }}
                 className="font-montserrat font-bold uppercase tracking-widest text-xs px-6 py-4 border border-white/20 text-[#8b949e] rounded-lg hover:border-white/40 hover:text-white transition-all duration-300"
               >
@@ -659,4 +694,4 @@ const CreateBlog = () => {
   )
 }
 
-export default CreateBlog
+export default EditBlog

@@ -42,3 +42,207 @@
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
+
+/* ──────────────────────────────────────────
+   PROSE GRIVILABS — Blog Detail Markdown
+────────────────────────────────────────── */
+
+.prose-grivilabs {
+  color: var(--color-text-primary);
+  font-family: var(--font-inter);
+  font-size: 0.9375rem;
+  line-height: 1.8;
+}
+
+.prose-grivilabs h1,
+.prose-grivilabs h2,
+.prose-grivilabs h3,
+.prose-grivilabs h4 {
+  font-family: var(--font-montserrat);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.prose-grivilabs h1 { font-size: 2rem; }
+.prose-grivilabs h2 { font-size: 1.5rem; }
+.prose-grivilabs h3 { font-size: 1.125rem; }
+
+.prose-grivilabs p {
+  margin-bottom: 1.25rem;
+  color: var(--color-text-secondary);
+}
+
+.prose-grivilabs strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.prose-grivilabs em {
+  color: var(--color-text-secondary);
+}
+
+.prose-grivilabs a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-grivilabs a:hover {
+  color: #ffffff;
+}
+
+.prose-grivilabs ul,
+.prose-grivilabs ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--color-text-secondary);
+}
+
+.prose-grivilabs ul { list-style-type: disc; }
+.prose-grivilabs ol { list-style-type: decimal; }
+
+.prose-grivilabs li {
+  margin-bottom: 0.375rem;
+}
+
+.prose-grivilabs blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.prose-grivilabs code {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: 'Courier New', monospace;
+}
+
+.prose-grivilabs pre {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose-grivilabs pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+}
+
+.prose-grivilabs hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 2rem 0;
+}
+
+.prose-grivilabs img {
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+  max-width: 100%;
+}
+
+.prose-grivilabs table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+
+.prose-grivilabs th {
+  background: var(--color-bg-secondary);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-family: var(--font-montserrat);
+  font-weight: 700;
+  color: #ffffff;
+  border: 1px solid var(--color-border);
+}
+
+.prose-grivilabs td {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+/* ──────────────────────────────────────────
+   TIPTAP EDITOR — Placeholder
+────────────────────────────────────────── */
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #6e7681;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap h1, .tiptap h2, .tiptap h3 {
+  font-family: var(--font-montserrat);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 1rem 0 0.5rem;
+}
+
+.tiptap h1 { font-size: 1.75rem; }
+.tiptap h2 { font-size: 1.375rem; }
+.tiptap h3 { font-size: 1.125rem; }
+
+.tiptap p { margin-bottom: 0.75rem; }
+
+.tiptap strong { color: #ffffff; font-weight: 700; }
+
+.tiptap ul, .tiptap ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.tiptap ul { list-style-type: disc; }
+.tiptap ol { list-style-type: decimal; }
+
+.tiptap blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+.tiptap code {
+  background: var(--color-bg-tertiary);
+  color: var(--color-accent);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875em;
+}
+
+.tiptap pre {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.tiptap pre code {
+  background: transparent;
+  color: var(--color-text-primary);
+  padding: 0;
+}
