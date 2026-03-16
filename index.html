@@ -35,17 +35,25 @@
     <meta name="twitter:image"       content="https://grivilabs.com/og-image.png" />
 
     <!-- ─── Favicon ─── -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/Grivilabs..svg" />
 
     <!-- ─── Font Preconnect ─── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- ─── Font Load (display=swap untuk performa) ─── -->
+    <!-- ─── Font Load Async (tidak blocking render) ─── -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;500;700&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>
