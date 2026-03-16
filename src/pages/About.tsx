@@ -1,4 +1,5 @@
 import { motion } from 'motion/react'
+import SEO from '../components/seo/SEO'
 import { VscCode } from 'react-icons/vsc'
 import { MdOutlineSpeed, MdHandshake } from 'react-icons/md'
 import { TbStack2 } from 'react-icons/tb'
@@ -71,24 +72,17 @@ const founders = [
   },
 ]
 
-const testimonials = [
-  {
-    text: 'Website kami sekarang load dalam 1,2 detik. Pelanggan makin betah, konversi naik drastis sejak bulan pertama.',
-    name: 'Budi Santoso',
-    role: 'Owner, Kafe Nusantara',
-  },
-  {
-    text: 'Akhirnya ada vendor IT yang mau menjelaskan dengan bahasa manusia. Tidak ada yang disembunyikan, semuanya transparan dari awal.',
-    name: 'Siti Rahma',
-    role: 'Founder, Klinik Cantik Berjaya',
-  },
-]
-
 // COMPONENT
 
 const About = () => {
   return (
-    <main>
+    <>
+      <SEO
+        title="Tentang Kami"
+        description="Kenali GriviLabs lebih dekat. Tech studio independen yang didirikan untuk membantu UMKM Indonesia memiliki aset digital yang cepat, aman, dan scalable tanpa bergantung pada template WordPress."
+        canonical="/about"
+      />
+      <main>
 
       {/* ==============================
           HERO - bg primary
@@ -405,6 +399,7 @@ const About = () => {
       </section>
 
     </main>
+    </>
   )
 }
 

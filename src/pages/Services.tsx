@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import SEO from '../components/seo/SEO'
 import { BsLightningCharge } from 'react-icons/bs'
 import { MdStorefront, MdOutlineSupport } from 'react-icons/md'
 import { TbEngine, TbLifebuoy } from 'react-icons/tb'
@@ -188,7 +189,13 @@ const Services = () => {
   const current = packages.find((p) => p.id === activePackage)!
 
   return (
-    <main>
+    <>
+      <SEO
+        title="Layanan"
+        description="Temukan paket layanan web development GriviLabs yang sesuai bisnis Anda. Mulai dari Landing Page, Company Profile, Web App, Digital Rescue, hingga Maintenance bulanan. 100% custom code, nol template."
+        canonical="/services"
+      />
+      <main>
       <section className="pt-32 pb-24 bg-[#0d1117] relative overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-[600px] h-[600px] rounded-full bg-[#2ad882]" style={{ filter: 'blur(140px)', opacity: 0.05 }} />
@@ -295,6 +302,7 @@ const Services = () => {
         </div>
       </section>
     </main>
+    </>
   )
 }
 

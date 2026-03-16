@@ -1,4 +1,5 @@
 import { motion } from 'motion/react'
+import SEO from '../components/seo/SEO'
 import { HiOutlineMail } from 'react-icons/hi'
 import { MdOutlineWorkHistory } from 'react-icons/md'
 import { TbRefresh } from 'react-icons/tb'
@@ -134,7 +135,13 @@ const Teams = () => {
   const { members, loading, error, refetch } = useTeams()
 
   return (
-    <main>
+    <>
+      <SEO
+        title="Tim Kami"
+        description="Kenali tim profesional di balik GriviLabs. 12 talenta dari divisi Engineering, Design, dan Product yang berdedikasi membangun solusi digital terbaik untuk bisnis Anda."
+        canonical="/teams"
+      />
+      <main>
 
       {/* ==============================
           HERO - bg primary
@@ -318,6 +325,7 @@ const Teams = () => {
       </section>
 
     </main>
+    </>
   )
 }
 

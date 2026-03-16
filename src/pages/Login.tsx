@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import SEO from "../components/seo/SEO";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,7 +26,14 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0d1117] px-4">
+    <>
+      <SEO
+        title="Login"
+        description="Masuk ke akun GriviLabs untuk mengakses fitur pengelolaan konten blog."
+        canonical="/login"
+        noIndex={true}
+      />
+      <div className="min-h-screen flex items-center justify-center bg-[#0d1117] px-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="font-montserrat font-black uppercase tracking-tight text-white text-3xl">
@@ -85,6 +93,7 @@ export default function Login() {
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

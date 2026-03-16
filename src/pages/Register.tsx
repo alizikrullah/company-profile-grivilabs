@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import SEO from "../components/seo/SEO";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -32,7 +33,14 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0d1117] px-4">
+    <>
+      <SEO
+        title="Register"
+        description="Buat akun GriviLabs untuk mengakses fitur pengelolaan konten."
+        canonical="/register"
+        noIndex={true}
+      />
+      <div className="min-h-screen flex items-center justify-center bg-[#0d1117] px-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="font-montserrat font-black uppercase tracking-tight text-white text-3xl">
@@ -105,6 +113,7 @@ export default function Register() {
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

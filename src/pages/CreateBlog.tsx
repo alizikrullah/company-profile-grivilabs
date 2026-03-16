@@ -6,6 +6,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from '@tiptap/extension-character-count'
 import { motion } from 'motion/react'
 import { supabase } from '../lib/supabase'
+import SEO from '../components/seo/SEO'
 import { useBlog } from '../store/BlogContext'
 import { useAuth } from '../store/AuthContext'
 
@@ -427,7 +428,14 @@ const CreateBlog = () => {
   }
 
   return (
-    <main className="min-h-screen bg-[#0d1117]">
+    <>
+      <SEO
+        title="Buat Artikel Baru"
+        description="Tulis dan publikasikan artikel baru di blog GriviLabs."
+        canonical="/blog/create"
+        noIndex={true}
+      />
+      <main className="min-h-screen bg-[#0d1117]">
       {/* ─── HERO ─── */}
       <section className="pt-32 pb-8">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
@@ -656,6 +664,7 @@ const CreateBlog = () => {
         </div>
       </section>
     </main>
+    </>
   )
 }
 

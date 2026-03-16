@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
+import SEO from '../components/seo/SEO'
 import { useBlog } from '../store/BlogContext'
 import { useAuth } from '../store/AuthContext'
 import { supabase } from '../lib/supabase'
@@ -193,8 +194,21 @@ const BlogDetail = () => {
 
   const isAdminSupabase = role === 'admin' && post.source === 'supabase'
 
+  const plainTextExcerpt = post.content
+    .replace(/<[^>]+>/g, '')
+    .slice(0, 155)
+    .trim()
+
   return (
-    <main className="min-h-screen bg-[#0d1117]">
+    <>
+      <SEO
+        title={post.title}
+        description={plainTextExcerpt || `Baca artikel "${post.title}" di blog GriviLabs.`}
+        canonical={`/blog/${post.slug}`}
+        ogImage={post.coverImage || undefined}
+        ogType="article"
+      />
+      <main className="min-h-screen bg-[#0d1117]">
       {/* ─── Delete Modal ─── */}
       <AnimatePresence>
         {showDeleteModal && (
@@ -348,6 +362,7 @@ const BlogDetail = () => {
         </div>
       </motion.section>
     </main>
+    </>
   )
 }
 

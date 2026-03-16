@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
+import SEO from '../components/seo/SEO'
 import { useBlog, type BlogPost } from '../store/BlogContext'
 import { useAuth } from '../store/AuthContext'
 
@@ -226,7 +227,13 @@ const BlogList = () => {
   const restPosts = featuredPost ? filtered.slice(1) : filtered
 
   return (
-    <main className="min-h-screen">
+    <>
+      <SEO
+        title="Blog"
+        description="Baca artikel dan insight seputar web development, strategi digital, dan tips bisnis online dari tim GriviLabs. Update rutin untuk UMKM Indonesia yang ingin berkembang secara digital."
+        canonical="/blog"
+      />
+      <main className="min-h-screen">
       {/* ─── HERO ─── */}
       <section className="pt-32 pb-20 bg-[#0d1117] relative overflow-hidden">
         {/* Decorative Blurs */}
@@ -395,6 +402,7 @@ const BlogList = () => {
         </div>
       </section>
     </main>
+    </>
   )
 }
 
