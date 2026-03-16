@@ -6,6 +6,7 @@ import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import GuestRoute from "./components/layout/GuestRoute";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 // ------------------------------------
 // LAZY ROUTES
@@ -46,6 +47,7 @@ export default function App() {
   return (
     <TeamsProvider>
       <BlogProvider>
+        <ScrollToTop />
         <Navbar />
         <main>
           <Suspense fallback={<PageLoader />}>

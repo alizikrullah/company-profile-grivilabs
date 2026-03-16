@@ -26,8 +26,8 @@ const LogoStrip = () => {
   const doubled = [...logos, ...logos]
 
   return (
-    <section className="py-10 border-b border-white/10 bg-[#0d1117] overflow-hidden">
-      <div className="flex items-center gap-6 mb-8 px-6">
+    <section className="py-10 border-b border-white/10 bg-[#0d1117]" style={{ overflow: 'hidden' }}>
+      <div className="flex items-center gap-4 mb-8 px-6">
         <div className="flex-1 h-px bg-white/10" />
         <span className="font-inter text-xs tracking-[0.3em] text-[#9ca3af] uppercase whitespace-nowrap">
           Dipercaya oleh brand-brand pilihan
@@ -35,20 +35,46 @@ const LogoStrip = () => {
         <div className="flex-1 h-px bg-white/10" />
       </div>
 
-      <div className="relative overflow-hidden">
+      {/* Wrapper dengan overflow hidden dan lebar penuh layar */}
+      <div
+        style={{
+          overflow: 'hidden',
+          width: '100%',
+          position: 'relative',
+        }}
+      >
         <div
-          className="flex items-center gap-10 w-max"
-          style={{ animation: 'marquee 40s linear infinite' }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '2rem',
+            width: 'max-content',
+            animation: 'marquee 40s linear infinite',
+          }}
         >
           {doubled.map((logo, i) => (
             <div
               key={i}
-              className="w-36 h-20 flex items-center justify-center bg-white rounded-xl px-3 py-2 opacity-70 hover:opacity-100 transition-opacity duration-300 shrink-0"
+              style={{
+                width: '120px',
+                height: '72px',
+                flexShrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                padding: '8px 10px',
+                opacity: 0.7,
+              }}
             >
               <img
                 src={logo.src}
                 alt={logo.alt}
-                className="max-w-full max-h-full object-contain"
+                width={100}
+                height={56}
+                className="object-contain"
+                style={{ maxWidth: '100%', maxHeight: '100%' }}
                 loading="lazy"
               />
             </div>
